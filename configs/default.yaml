@@ -1,0 +1,29 @@
+app:
+  name: yolo-guard
+  version: 0.1.0
+  log_level: info
+  jwt_exp_minutes: 60
+  ws_hz: 10
+  jpeg_quality: 85
+  queue_size: 5
+
+database:
+  url: ${DATABASE_URL}
+
+storage:
+  path: ${STORAGE_PATH:-./storage}
+
+yolo:
+  weights: artifacts/weights/yolov8n.pt
+  imgsz: 640
+  conf: 0.25
+  iou: 0.45
+  max_det: 100
+  device: cpu
+  half: false
+  classes_allow: []
+  classes_deny: []
+  tracker: null
+
+alerts:
+  webhook_retry_count: ${WEBHOOK_RETRY_COUNT:-3}

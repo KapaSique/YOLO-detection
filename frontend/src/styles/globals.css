@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f6f8fb;
+  --fg: #0b1220;
+}
+
+.dark {
+  --bg: #050910;
+  --fg: #f7f9fc;
+}
+
+body {
+  background: radial-gradient(120% 140% at 20% 20%, rgba(20, 244, 197, 0.08), transparent),
+    radial-gradient(100% 100% at 80% 0%, rgba(14, 165, 233, 0.1), transparent),
+    var(--bg);
+  color: var(--fg);
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.card {
+  @apply rounded-2xl border border-white/10 bg-white/60 backdrop-blur-md dark:bg-[#0b1220]/80 shadow-lg;
+}
+
+.gradient-pill {
+  background: linear-gradient(135deg, #14f4c5, #0ea5e9);
+}
