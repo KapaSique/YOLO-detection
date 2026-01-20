@@ -26,6 +26,7 @@ services:
       - ./storage:/app/storage
 
   cv:
+    # For Linux webcam passthrough use: docker compose -f docker-compose.yml -f docker-compose.camera.yml up
     build:
       context: .
       dockerfile: docker/cv.Dockerfile

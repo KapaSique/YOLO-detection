@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, List, Optional
 
 import numpy as np
@@ -37,11 +38,21 @@ class YoloDetector:
         if YOLO is None:
             logger.warning("Ultralytics not available, detector will emit empty detections")
             return
+        weights_to_load = weights
+        weights_path = Path(weights)
+        if weights_path.parent != Path(".") and not weights_path.exists():
+            weights_to_load = weights_path.name
+            logger.warning(
+                "Weights path {} not found; falling back to model name {} for auto-download. "
+                "Set WEIGHTS to a local file to skip download.",
+                weights,
+                weights_to_load,
+            )
         try:
-            self.model = YOLO(weights)
-            logger.info("Loaded YOLO weights {}", weights)
+            self.model = YOLO(weights_to_load)
+            logger.info("Loaded YOLO weights {}", weights_to_load)
         except Exception as exc:  # pragma: no cover - depends on runtime env
-            logger.error("Failed to load YOLO weights {}: {}", weights, exc)
+            logger.error("Failed to load YOLO weights {}: {}", weights_to_load, exc)
             self.model = None
 
     def predict(self, frame: np.ndarray) -> List[dict[str, Any]]:

@@ -1,0 +1,5 @@
+services:
+  cv:
+    # Linux-only: passthrough host webcam (/dev/video0) into the container.
+    devices:
+      - /dev/video0:/dev/video0

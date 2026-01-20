@@ -7,7 +7,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     source: str = "0"  # webcam index as string to keep env simple
-    source_type: str = "webcam"
+    source_type: str = "webcam"  # webcam|rtsp|file|synthetic
+    capture_retry_sec: float = 5.0
     weights: str = "artifacts/weights/yolov8n.pt"
     imgsz: int = 640
     conf: float = 0.25
