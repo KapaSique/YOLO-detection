@@ -25,6 +25,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/node": "^20.11.28",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.1.0",
     "prettier": "^3.2.5",

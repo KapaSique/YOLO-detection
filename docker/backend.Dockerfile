@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update && apt-get install -y build-essential ffmpeg && rm -rf /var/lib/apt/lists/*
 
-COPY backend/requirements.txt backend/requirements.txt
-COPY backend/requirements-dev.txt backend/requirements-dev.txt
+COPY backend/requirements.txt .
+COPY backend/requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend /app/backend

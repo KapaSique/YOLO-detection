@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update && apt-get install -y build-essential ffmpeg libgl1 && rm -rf /var/lib/apt/lists/*
 
-COPY cv/requirements.txt cv/requirements.txt
-COPY cv/requirements-dev.txt cv/requirements-dev.txt
+COPY cv/requirements.txt .
+COPY cv/requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY cv /app/cv
