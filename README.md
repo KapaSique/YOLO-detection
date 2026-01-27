@@ -88,3 +88,4 @@ Frontend -> HTTP/WS -> Backend -> DB
 - Wire CV worker to API/DB and WebSocket stream, implement alert engine + exports.
 - Flesh out frontend pages with real data (React Query), shadcn/ui components, forms with zod, charts (Recharts).
 - Add migrations, Prometheus metrics, health/readiness endpoints, audit log UI, CI workflows.
+petmek
