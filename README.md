@@ -25,7 +25,6 @@ docs/             Documentation stubs (API, event engine)
 ## Quickstart (Docker)
 ```bash
 cp .env.example .env
-# drop your weights into artifacts/weights/yolov8n.pt or adjust configs/default.yaml
 docker-compose up --build
 ```
 - Backend: http://localhost:8000 (OpenAPI at `/docs`)
