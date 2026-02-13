@@ -14,7 +14,7 @@ storage:
   path: ${STORAGE_PATH:-./storage}
 
 yolo:
-  weights: artifacts/weights/yolov8n.pt
+  weights: artifacts/weights/yolo26n.pt
   imgsz: 640
   conf: 0.25
   iou: 0.45

@@ -1,12 +1,12 @@
 # YOLO Guard — Real-time Object Detection Platform
 
-YOLO Guard is a modular stack that captures video from webcams/RTSP/files, runs Ultralytics YOLO, streams detections to the browser, stores events, and exposes dashboards/analytics with localization and theming.
+YOLO Guard is a modular stack that captures video from webcams/RTSP/files, runs Ultralytics YOLO26, streams detections to the browser, stores events, and exposes dashboards/analytics with localization and theming.
 
 > Status: scaffolded foundation (backend FastAPI skeleton, CV worker shell, Next.js UI shell, Docker wiring). Core loops and UI flows are intentionally minimal so you can extend quickly.
 
 ## Features (MVP target)
 - FastAPI backend with auth (JWT) + RBAC, sources/zones CRUD, runtime settings, health checks.
-- CV worker package prepared for Ultralytics YOLO inference with synthetic-frame fallback.
+- CV worker package prepared for Ultralytics YOLO26 inference with synthetic-frame fallback.
 - Next.js (App Router) frontend with theme + i18n (EN/RU), dashboard layout, live preview controls, placeholder pages for Live/History/Analytics/Alerts/Sources/Settings/Users/Models.
 - Docker Compose stack (Postgres + backend + cv + frontend), Makefile helpers, `.env.example`, typed configs.
 - Docs stubs for API/event engine, analytics-ready schema (detections/events/alerts/audit).
@@ -17,7 +17,7 @@ backend/          FastAPI app, SQLAlchemy models, Alembic config, tests
 cv/               YOLO worker package, pipeline and detector wrappers, tests
 frontend/         Next.js App Router UI with Tailwind/i18n/theme shell
 configs/          default.yaml with runtime defaults
-artifacts/weights placeholder for model weights (yolov8n.pt etc.)
+artifacts/weights placeholder for model weights (yolo26n.pt etc.)
 docker/           Dockerfiles for backend, cv worker, frontend
 docs/             Documentation stubs (API, event engine)
 ```
@@ -51,7 +51,7 @@ Set in `.env` (see `.env.example`):
 - Tests: `backend/tests` (health check sample); add more for event engine, alerts, auth flow.
 
 ## CV Worker
-- Package `cv/yolo_guard`: settings, YOLO detector wrapper (`detector.py`), detection pipeline with synthetic-frame fallback (`pipeline.py`), worker loop (`worker.py`).
+- Package `cv/yolo_guard`: settings, YOLO26 detector wrapper (`detector.py`), detection pipeline with synthetic-frame fallback (`pipeline.py`), worker loop (`worker.py`).
 - Requirements include `ultralytics`, `opencv-python-headless`, `loguru`.
 - Entry: `python -m yolo_guard.worker` (used by Dockerfile).
 
@@ -62,7 +62,7 @@ Set in `.env` (see `.env.example`):
 - Theming + language toggles in header; global styling in `src/styles/globals.css`.
 
 ## Adding RTSP & Weights
-- Place YOLO weights into `artifacts/weights` (default `yolov8n.pt` path in configs/default.yaml).
+- Place YOLO weights into `artifacts/weights` (default `yolo26n.pt` path in configs/default.yaml).
 - Create a source via `/api/sources` (type `rtsp`, `url_or_index` your RTSP URL).
 - Start/stop/test endpoints provided (`/api/sources/{id}/start|stop|test`); hook CV worker to these in the next iteration.
 

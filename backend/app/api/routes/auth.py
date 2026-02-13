@@ -1,6 +1,4 @@
-from datetime import timedelta
-
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -10,7 +8,7 @@ from ... import schemas
 from ...config import settings
 from ...db import get_db
 from ...deps import get_current_user
-from ...models import User
+from ...models import Role, User
 from ...security import create_access_token, get_password_hash, verify_password
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -21,7 +19,7 @@ def register_user(payload: schemas.UserCreate, db: Session = Depends(get_db)) ->
     existing = db.query(User).filter(User.email == payload.email).first()
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
-    user = User(email=payload.email, password_hash=get_password_hash(payload.password), role=payload.role)
+    user = User(email=payload.email, password_hash=get_password_hash(payload.password), role=Role.operator)
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -41,7 +39,7 @@ def login(
         data={"sub": str(user.id), "role": user.role},
         expires_delta=access_token_expires,
     )
-    user.last_login = datetime.utcnow()
+    user.last_login = datetime.now(timezone.utc)
     db.commit()
     return schemas.Token(access_token=token)
 

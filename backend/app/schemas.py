@@ -22,7 +22,8 @@ class UserBase(BaseModel):
     role: Role = Role.operator
 
 
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
+    email: EmailStr
     password: str = Field(min_length=6, max_length=128)
 
 

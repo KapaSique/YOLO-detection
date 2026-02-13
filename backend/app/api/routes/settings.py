@@ -10,7 +10,7 @@ class RuntimeSettingsState:
         self.conf: float = 0.25
         self.iou: float = 0.45
         self.imgsz: int = 640
-        self.weights: str = "/app/artifacts/weights/yolov8n.pt"
+        self.weights: str = "/app/artifacts/weights/yolo26n.pt"
         self.ws_hz: int = 10
         self.jpeg_quality: int = 85
 
