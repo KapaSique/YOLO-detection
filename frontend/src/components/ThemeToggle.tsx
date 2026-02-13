@@ -15,12 +15,11 @@ export function ThemeToggle() {
 
   return (
     <button
-      className="flex items-center gap-2 rounded-md border border-border px-3 py-1 text-sm font-medium hover:bg-accent"
+      className="rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       onClick={() => setTheme(next)}
       aria-label="Toggle theme"
     >
       {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-      {next}
     </button>
   );
 }

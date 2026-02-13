@@ -15,13 +15,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6">
+      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6">
         <Sidebar />
 
         <main className="flex-1 space-y-4">
           <Header />
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard title={t("activeSource")} value="Dock-RTSP" secondary="Running" icon={<GaugeCircle size={18} />} />
             <StatCard title={t("fps")} value="18.3" secondary="Target 24" icon={<Signal size={18} />} />
             <StatCard title={t("latency")} value="41 ms" secondary="P95 last 5 min" icon={<Activity size={18} />} />

@@ -22,17 +22,18 @@ export function Sidebar() {
   const { t } = useTranslation();
 
   return (
-    <aside className="flex h-screen w-64 flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
+    <aside className="sticky top-6 flex h-[calc(100vh-3rem)] w-56 shrink-0 flex-col gap-6 rounded-xl border border-border bg-card p-4 shadow-sm scrollbar-thin overflow-y-auto">
+      <div className="flex items-center gap-3 px-1">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-xs font-black tracking-tight text-primary-foreground">
           YG
         </div>
-        <div>
-          <div className="text-sm uppercase tracking-wide text-muted-foreground">YOLO</div>
-          <div className="text-lg font-bold text-foreground">Guard</div>
+        <div className="leading-tight">
+          <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">YOLO</div>
+          <div className="text-sm font-bold text-foreground">Guard</div>
         </div>
       </div>
-      <nav className="flex-1 space-y-1">
+
+      <nav className="flex-1 space-y-0.5">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = pathname === item.href;
@@ -40,13 +41,13 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+              className={`group flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors ${
                 active
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
-              <Icon size={16} />
+              <Icon size={16} className={active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"} />
               {t(item.labelKey)}
             </Link>
           );

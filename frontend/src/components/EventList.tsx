@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock3, Dot } from "lucide-react";
+import { Clock3 } from "lucide-react";
 
 const demoEvents = [
   { ts: "10:14:03", source: "Dock-RTSP", label: "person", zone: "A", status: "presence_start", confidence: 0.92 },
@@ -10,26 +10,26 @@ const demoEvents = [
 
 export function EventList() {
   return (
-    <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Live events</h3>
-        <Clock3 size={16} className="text-muted-foreground" />
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+        <h3 className="text-sm font-semibold text-card-foreground">Live events</h3>
+        <Clock3 size={14} className="text-muted-foreground" />
       </div>
-      <div className="space-y-2">
+      <div className="divide-y divide-border">
         {demoEvents.map((event) => (
-          <div key={event.ts} className="flex items-center justify-between rounded-md border border-border p-3 text-sm">
-            <div className="flex items-center gap-2">
-              <Dot className="text-foreground" />
+          <div key={event.ts} className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-muted/50">
+            <div className="flex items-center gap-3">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
               <div>
-                <div className="font-semibold text-card-foreground">{event.label}</div>
+                <div className="text-sm font-medium text-card-foreground">{event.label}</div>
                 <div className="text-xs text-muted-foreground">
                   {event.source} · zone {event.zone}
                 </div>
               </div>
             </div>
-            <div className="text-right text-xs text-muted-foreground">
-              <div className="font-semibold text-foreground">{event.status}</div>
-              <div>{event.ts}</div>
+            <div className="text-right">
+              <div className="text-xs font-medium text-foreground">{event.status}</div>
+              <div className="text-[11px] text-muted-foreground">{event.ts}</div>
             </div>
           </div>
         ))}

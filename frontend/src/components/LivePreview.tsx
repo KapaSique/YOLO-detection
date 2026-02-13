@@ -11,40 +11,41 @@ export function LivePreview() {
   const [running, setRunning] = useState(false);
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm font-semibold text-card-foreground">
-          <Video size={18} /> Live stream
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+        <div className="flex items-center gap-2.5 text-sm font-semibold text-card-foreground">
+          <Video size={18} className="text-primary" />
+          Live stream
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition ${
-              running
-                ? "bg-destructive text-destructive-foreground"
-                : "bg-primary text-primary-foreground"
-            }`}
-            onClick={() => setRunning((v) => !v)}
-          >
-            {running ? <Square size={14} /> : <Play size={14} />}
-            {running ? t("stopStream") : t("startStream")}
-          </button>
-        </div>
+        <button
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+            running
+              ? "bg-red-500 text-white shadow-lg shadow-red-500/25 hover:bg-red-600"
+              : "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:brightness-110"
+          }`}
+          onClick={() => setRunning((v) => !v)}
+        >
+          {running ? <Square size={14} /> : <Play size={14} />}
+          {running ? t("stopStream") : t("startStream")}
+        </button>
       </div>
 
-      <div className="flex h-[360px] items-center justify-center overflow-hidden rounded-md border border-border bg-muted">
-        <p className="text-sm text-muted-foreground">
-          {running ? "Stream active — no video source connected" : "Press Start to begin streaming"}
+      <div className="flex h-[320px] items-center justify-center bg-black/90">
+        <p className="text-sm text-zinc-500">
+          {running ? "Stream active" : "Press Start to begin"}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <div className="space-y-1 rounded-md border border-border bg-muted/50 p-3 text-sm">
-          <div className="flex items-center justify-between">
+      <div className="grid grid-cols-2 gap-px border-t border-border bg-border">
+        <div className="space-y-2 bg-card p-4">
+          <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">{t("confThreshold")}</span>
-            <span className="font-semibold">{Math.round(conf * 100)}%</span>
+            <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+              {Math.round(conf * 100)}%
+            </span>
           </div>
           <input
-            className="w-full accent-foreground"
+            className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
             type="range"
             min="0.05"
             max="0.9"
@@ -53,13 +54,15 @@ export function LivePreview() {
             onChange={(e) => setConf(parseFloat(e.target.value))}
           />
         </div>
-        <div className="space-y-1 rounded-md border border-border bg-muted/50 p-3 text-sm">
-          <div className="flex items-center justify-between">
+        <div className="space-y-2 bg-card p-4">
+          <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">{t("iouThreshold")}</span>
-            <span className="font-semibold">{Math.round(iou * 100)}%</span>
+            <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+              {Math.round(iou * 100)}%
+            </span>
           </div>
           <input
-            className="w-full accent-foreground"
+            className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
             type="range"
             min="0.1"
             max="0.95"

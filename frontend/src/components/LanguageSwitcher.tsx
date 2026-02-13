@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
 
   return (
     <button
-      className="rounded-md border border-border px-3 py-1 text-sm font-medium hover:bg-accent"
+      className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       onClick={toggle}
       aria-label={t("language")}
     >

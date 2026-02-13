@@ -27,49 +27,56 @@ export default function LivePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6">
+      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6">
         <Sidebar />
 
         <main className="flex-1 space-y-4">
           <Header />
 
-          <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm font-semibold text-card-foreground">
-                <Video size={18} /> {t("live")}
+          <div className="space-y-4">
+            {/* Video card */}
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="flex items-center justify-between border-b border-border px-5 py-3">
+                <div className="flex items-center gap-2.5 text-sm font-semibold text-card-foreground">
+                  <Video size={18} className="text-primary" />
+                  {t("live")}
+                </div>
+                <button
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+                    running
+                      ? "bg-red-500 text-white shadow-lg shadow-red-500/25 hover:bg-red-600"
+                      : "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:brightness-110"
+                  }`}
+                  onClick={handleToggle}
+                >
+                  {running ? <Square size={14} /> : <Play size={14} />}
+                  {running ? t("stopStream") : t("startStream")}
+                </button>
               </div>
-              <button
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold transition ${
-                  running
-                    ? "bg-destructive text-destructive-foreground"
-                    : "bg-primary text-primary-foreground"
-                }`}
-                onClick={handleToggle}
-              >
-                {running ? <Square size={14} /> : <Play size={14} />}
-                {running ? t("stopStream") : t("startStream")}
-              </button>
+
+              {error && (
+                <div className="flex items-center gap-2 border-b border-border bg-red-500/10 px-5 py-2.5 text-sm text-red-500">
+                  <AlertCircle size={16} />
+                  {error}
+                </div>
+              )}
+
+              <div className="aspect-video max-h-[540px] w-full">
+                <WebcamFeed running={running} onError={handleError} />
+              </div>
             </div>
 
-            {error && (
-              <div className="mb-3 flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                <AlertCircle size={16} />
-                {error}
-              </div>
-            )}
-
-            <div className="mx-auto h-[480px] max-w-[640px] overflow-hidden rounded-md border border-border">
-              <WebcamFeed running={running} onError={handleError} />
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              <div className="space-y-1 rounded-md border border-border bg-muted/50 p-3 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">{t("confThreshold")}</span>
-                  <span className="font-semibold">{Math.round(conf * 100)}%</span>
+            {/* Controls */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium text-muted-foreground">{t("confThreshold")}</span>
+                  <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+                    {Math.round(conf * 100)}%
+                  </span>
                 </div>
                 <input
-                  className="w-full accent-foreground"
+                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
                   type="range"
                   min="0.05"
                   max="0.9"
@@ -78,13 +85,15 @@ export default function LivePage() {
                   onChange={(e) => setConf(parseFloat(e.target.value))}
                 />
               </div>
-              <div className="space-y-1 rounded-md border border-border bg-muted/50 p-3 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">{t("iouThreshold")}</span>
-                  <span className="font-semibold">{Math.round(iou * 100)}%</span>
+              <div className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium text-muted-foreground">{t("iouThreshold")}</span>
+                  <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+                    {Math.round(iou * 100)}%
+                  </span>
                 </div>
                 <input
-                  className="w-full accent-foreground"
+                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
                   type="range"
                   min="0.1"
                   max="0.95"
