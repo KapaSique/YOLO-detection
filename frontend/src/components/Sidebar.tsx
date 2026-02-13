@@ -22,12 +22,14 @@ export function Sidebar() {
   const { t } = useTranslation();
 
   return (
-    <aside className="card flex h-screen w-64 flex-col gap-4 p-4">
+    <aside className="flex h-screen w-64 flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-sm">
       <div className="flex items-center gap-3">
-        <div className="gradient-pill h-10 w-10 rounded-xl" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
+          YG
+        </div>
         <div>
-          <div className="text-sm uppercase tracking-wide text-neutral-500">YOLO</div>
-          <div className="text-lg font-bold text-neutral-900 dark:text-white">Guard</div>
+          <div className="text-sm uppercase tracking-wide text-muted-foreground">YOLO</div>
+          <div className="text-lg font-bold text-foreground">Guard</div>
         </div>
       </div>
       <nav className="flex-1 space-y-1">
@@ -38,8 +40,10 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
-                active ? "bg-brand/10 text-brand" : "text-neutral-600 hover:bg-black/5 dark:text-neutral-200"
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition ${
+                active
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >
               <Icon size={16} />

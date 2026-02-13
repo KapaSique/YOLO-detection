@@ -14,7 +14,7 @@ export default function HomePage() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e8f2ff] to-[#f8f9ff] text-neutral-900 dark:from-[#050b16] dark:to-[#0a1022] dark:text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6">
         <Sidebar />
 

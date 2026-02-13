@@ -10,20 +10,20 @@ export function Header() {
   const { t } = useTranslation();
 
   return (
-    <header className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/50 px-4 py-3 backdrop-blur dark:bg-[#0c1220]/70">
+    <header className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3 shadow-sm">
       <div>
-        <p className="text-xs uppercase tracking-wide text-neutral-500">{t("welcome")}</p>
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Real-time Object Detection</h1>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{t("welcome")}</p>
+        <h1 className="text-xl font-semibold text-foreground">Real-time Object Detection</h1>
       </div>
       <div className="flex items-center gap-3">
         <LanguageSwitcher />
         <ThemeToggle />
-        <button className="rounded-full border border-white/10 p-2 hover:border-brand" aria-label="Notifications">
+        <button className="rounded-md border border-border p-2 hover:bg-accent" aria-label="Notifications">
           <Bell size={18} />
         </button>
-        <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1">
+        <div className="flex items-center gap-2 rounded-md border border-border px-3 py-1">
           <CircleUser size={18} />
-          <span className="text-sm font-semibold">Operator</span>
+          <span className="text-sm font-medium">Operator</span>
         </div>
       </div>
     </header>
