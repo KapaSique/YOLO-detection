@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Optional
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -22,6 +22,20 @@ class Settings(BaseSettings):
     smtp_password: Optional[str] = None
     admin_seed_email: str = Field("admin@example.com", alias="ADMIN_SEED_EMAIL")
     admin_seed_password: str = Field("admin123", alias="ADMIN_SEED_PASSWORD")
+
+    @field_validator("smtp_host", "smtp_user", "smtp_password", mode="before")
+    @classmethod
+    def empty_str_to_none(cls, v: object) -> object:
+        if v == "":
+            return None
+        return v
+
+    @field_validator("smtp_port", mode="before")
+    @classmethod
+    def empty_str_to_none_int(cls, v: object) -> object:
+        if v == "" or v is None:
+            return None
+        return int(v)
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
