@@ -8,7 +8,7 @@ class FakeDetector:
 
 
 def test_pipeline_run_once_returns_payload():
-    settings = Settings(source="synthetic", source_type="file")
+    settings = Settings(source="synthetic", source_type="synthetic")
     pipeline = DetectionPipeline(settings=settings, detector=FakeDetector())
     payload = pipeline.run_once()
     assert payload["detections"][0]["class_id"] == 0

@@ -1,3 +1,4 @@
+import signal
 import time
 
 from loguru import logger
@@ -18,16 +19,18 @@ class Worker:
             logger.debug("Detections payload: {}", payload)
             time.sleep(max(0, 1 / 5))  # limit to ~5 Hz until connected to RTSP timing
 
-    def stop(self):
+    def stop(self, *_args):
+        logger.info("CV worker received stop signal, shutting down")
         self.running = False
 
 
 def main():
     worker = Worker()
+    signal.signal(signal.SIGTERM, worker.stop)
+    signal.signal(signal.SIGINT, worker.stop)
     try:
         worker.run()
     except KeyboardInterrupt:
-        logger.info("CV worker interrupted, shutting down")
         worker.stop()
 
 
