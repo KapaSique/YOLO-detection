@@ -11,3 +11,6 @@ email-validator>=2.0.0
 loguru==0.7.2
 psycopg2-binary==2.9.9
 python-multipart==0.0.9
+ultralytics>=8.4.0
+opencv-python-headless==4.9.0.80
+numpy==1.26.4

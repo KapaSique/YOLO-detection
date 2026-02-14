@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api.routes import auth, health, settings as runtime_settings, sources, zones
+from .api.routes import auth, detect, health, settings as runtime_settings, sources, zones
 from .config import settings
 from .db import Base, engine
 
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(health.router)
+app.include_router(detect.router)
 app.include_router(auth.router)
 app.include_router(sources.router)
 app.include_router(zones.router)
