@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y build-essential ffmpeg libgl1 && rm -rf
 
 COPY cv/requirements.txt .
 COPY cv/requirements-dev.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
 
 COPY cv /app/cv
 COPY configs /app/configs
