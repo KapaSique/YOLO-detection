@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6">
+      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6 lg:px-8">
         <Sidebar />
 
         <main className="flex-1 space-y-4">

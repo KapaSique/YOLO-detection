@@ -10,16 +10,16 @@ const demoEvents = [
 
 export function EventList() {
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+    <div className="surface-card overflow-hidden rounded-2xl">
+      <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
         <h3 className="text-sm font-semibold text-card-foreground">Live events</h3>
         <Clock3 size={14} className="text-muted-foreground" />
       </div>
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-border/70">
         {demoEvents.map((event) => (
-          <div key={event.ts} className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-muted/50">
+          <div key={event.ts} className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-muted/35">
             <div className="flex items-center gap-3">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
+              <span className="h-2 w-2 shrink-0 rounded-full bg-accent" />
               <div>
                 <div className="text-sm font-medium text-card-foreground">{event.label}</div>
                 <div className="text-xs text-muted-foreground">
@@ -28,8 +28,8 @@ export function EventList() {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-xs font-medium text-foreground">{event.status}</div>
-              <div className="text-[11px] text-muted-foreground">{event.ts}</div>
+              <div className="font-mono-ui text-xs font-medium text-foreground">{event.status}</div>
+              <div className="font-mono-ui text-[11px] text-muted-foreground">{event.ts}</div>
             </div>
           </div>
         ))}

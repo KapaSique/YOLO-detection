@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   return (
     <button
-      className="rounded-lg border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      className="rounded-xl border border-border/80 bg-muted/45 p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
       onClick={() => setTheme(next)}
       aria-label="Toggle theme"
     >

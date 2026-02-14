@@ -27,25 +27,24 @@ export default function LivePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6">
+      <div className="mx-auto flex max-w-[1400px] gap-6 px-4 py-6 lg:px-8">
         <Sidebar />
 
         <main className="flex-1 space-y-4">
           <Header />
 
           <div className="space-y-4">
-            {/* Video card */}
-            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-              <div className="flex items-center justify-between border-b border-border px-5 py-3">
+            <div className="surface-card overflow-hidden rounded-2xl">
+              <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
                 <div className="flex items-center gap-2.5 text-sm font-semibold text-card-foreground">
-                  <Video size={18} className="text-primary" />
+                  <Video size={18} className="text-accent" />
                   {t("live")}
                 </div>
                 <button
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
+                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition ${
                     running
-                      ? "bg-red-500 text-white shadow-lg shadow-red-500/25 hover:bg-red-600"
-                      : "bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:brightness-110"
+                      ? "border border-red-300/20 bg-red-500/90 text-white hover:bg-red-500"
+                      : "border border-primary/20 bg-primary text-primary-foreground hover:opacity-95"
                   }`}
                   onClick={handleToggle}
                 >
@@ -55,28 +54,27 @@ export default function LivePage() {
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 border-b border-border bg-red-500/10 px-5 py-2.5 text-sm text-red-500">
+                <div className="flex items-center gap-2 border-b border-red-500/20 bg-red-500/10 px-5 py-2.5 text-sm text-red-400">
                   <AlertCircle size={16} />
                   {error}
                 </div>
               )}
 
-              <div className="aspect-video max-h-[540px] w-full">
+              <div className="aspect-video max-h-[540px] w-full p-3">
                 <WebcamFeed running={running} onError={handleError} />
               </div>
             </div>
 
-            {/* Controls */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+              <div className="surface-card space-y-3 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium text-muted-foreground">{t("confThreshold")}</span>
-                  <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+                  <span className="font-mono-ui rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
                     {Math.round(conf * 100)}%
                   </span>
                 </div>
                 <input
-                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
+                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-accent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:shadow-md"
                   type="range"
                   min="0.05"
                   max="0.9"
@@ -85,15 +83,15 @@ export default function LivePage() {
                   onChange={(e) => setConf(parseFloat(e.target.value))}
                 />
               </div>
-              <div className="space-y-3 rounded-xl border border-border bg-card p-4 shadow-sm">
+              <div className="surface-card space-y-3 rounded-2xl p-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium text-muted-foreground">{t("iouThreshold")}</span>
-                  <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
+                  <span className="font-mono-ui rounded-md bg-secondary px-2 py-0.5 text-xs font-bold tabular-nums">
                     {Math.round(iou * 100)}%
                   </span>
                 </div>
                 <input
-                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
+                  className="h-2 w-full cursor-pointer appearance-none rounded-full bg-secondary accent-accent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:shadow-md"
                   type="range"
                   min="0.1"
                   max="0.95"
