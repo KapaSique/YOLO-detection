@@ -5,7 +5,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "sans-serif"]
+        sans: ["var(--font-grotesk)", "Space Grotesk", "sans-serif"],
+        mono: ["var(--font-mono)", "IBM Plex Mono", "monospace"]
       },
       borderRadius: {
         lg: "0.5rem",
