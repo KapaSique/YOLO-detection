@@ -1,12 +1,17 @@
 "use client";
 
-import { AlertCircle, Play, Square, Video } from "lucide-react";
-import { useCallback, useState } from "react";
+import { AlertCircle, Play, Square, Video, Activity } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
-import { WebcamFeed } from "../../components/WebcamFeed";
+import { WebcamFeed, Detection } from "../../components/WebcamFeed";
+
+interface LiveEvent {
+  label: string;
+  ts: string;
+}
 
 export default function LivePage() {
   const { t } = useTranslation();
@@ -14,6 +19,9 @@ export default function LivePage() {
   const [conf, setConf] = useState(0.25);
   const [iou, setIou] = useState(0.45);
   const [error, setError] = useState<string | null>(null);
+  const [detections, setDetections] = useState<Detection[]>([]);
+  const [events, setEvents] = useState<LiveEvent[]>([]);
+  const videoElRef = useRef<HTMLVideoElement | null>(null);
 
   const handleError = useCallback((msg: string) => {
     setError(msg);
@@ -22,8 +30,79 @@ export default function LivePage() {
 
   const handleToggle = () => {
     setError(null);
+    if (running) {
+      setDetections([]);
+    }
     setRunning((v) => !v);
   };
+
+  const handleVideoReady = useCallback((video: HTMLVideoElement) => {
+    videoElRef.current = video;
+  }, []);
+
+  // Detection loop
+  useEffect(() => {
+    if (!running) {
+      videoElRef.current = null;
+      return;
+    }
+
+    let stopped = false;
+
+    async function loop() {
+      while (!stopped) {
+        const video = videoElRef.current;
+        if (!video || video.readyState < 2) {
+          await new Promise((r) => setTimeout(r, 300));
+          continue;
+        }
+
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) break;
+          ctx.drawImage(video, 0, 0);
+
+          const blob = await new Promise<Blob | null>((resolve) =>
+            canvas.toBlob(resolve, "image/jpeg", 0.7)
+          );
+          if (!blob || stopped) break;
+
+          const form = new FormData();
+          form.append("file", blob, "frame.jpg");
+
+          const res = await fetch("/api/detect", { method: "POST", body: form });
+          if (!res.ok) {
+            await new Promise((r) => setTimeout(r, 1000));
+            continue;
+          }
+
+          const data = await res.json();
+          if (stopped) break;
+
+          const dets: Detection[] = data.detections ?? [];
+          setDetections(dets);
+
+          if (dets.length > 0) {
+            const ts = new Date().toLocaleTimeString();
+            const newEvents = dets.map((d) => ({ label: d.label, ts }));
+            setEvents((prev) => [...newEvents, ...prev].slice(0, 30));
+          }
+        } catch {
+          // Backend unavailable — silently continue
+        }
+
+        await new Promise((r) => setTimeout(r, 300));
+      }
+    }
+
+    loop();
+    return () => {
+      stopped = true;
+    };
+  }, [running]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -61,7 +140,12 @@ export default function LivePage() {
               )}
 
               <div className="aspect-video max-h-[540px] w-full p-3">
-                <WebcamFeed running={running} onError={handleError} />
+                <WebcamFeed
+                  running={running}
+                  onError={handleError}
+                  detections={detections}
+                  onVideoReady={handleVideoReady}
+                />
               </div>
             </div>
 
@@ -99,6 +183,30 @@ export default function LivePage() {
                   value={iou}
                   onChange={(e) => setIou(parseFloat(e.target.value))}
                 />
+              </div>
+            </div>
+
+            {/* Live Events */}
+            <div className="surface-card overflow-hidden rounded-2xl">
+              <div className="flex items-center gap-2.5 border-b border-border/70 px-5 py-3 text-sm font-semibold text-card-foreground">
+                <Activity size={18} className="text-accent" />
+                Live Events
+              </div>
+              <div className="max-h-[260px] overflow-y-auto">
+                {events.length === 0 ? (
+                  <p className="px-5 py-4 text-sm text-muted-foreground">
+                    No detections yet. Start the camera to begin.
+                  </p>
+                ) : (
+                  <ul className="divide-y divide-border/50">
+                    {events.map((ev, i) => (
+                      <li key={i} className="flex items-center justify-between px-5 py-2.5 text-sm">
+                        <span className="font-medium text-card-foreground">{ev.label}</span>
+                        <span className="text-xs text-muted-foreground">{ev.ts}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           </div>
