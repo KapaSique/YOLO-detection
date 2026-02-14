@@ -13,6 +13,12 @@ interface LiveEvent {
   ts: string;
 }
 
+interface LiveDetectionPayload {
+  type: string;
+  ts?: string;
+  detections?: Detection[];
+}
+
 export default function LivePage() {
   const { t } = useTranslation();
   const [running, setRunning] = useState(false);
@@ -40,10 +46,46 @@ export default function LivePage() {
     videoElRef.current = video;
   }, []);
 
+  useEffect(() => {
+    if (!running) {
+      return;
+    }
+
+    const stream = new EventSource("/api/live/events");
+    stream.onmessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data) as LiveDetectionPayload;
+        if (payload.type !== "detections") {
+          return;
+        }
+
+        const payloadDetections = payload.detections ?? [];
+        if (payloadDetections.length === 0) {
+          return;
+        }
+
+        const ts = payload.ts ? new Date(payload.ts).toLocaleTimeString() : new Date().toLocaleTimeString();
+        const items = payloadDetections.map((det) => ({ label: det.label, ts }));
+        setEvents((prev) => [...items, ...prev].slice(0, 30));
+      } catch {
+        // Ignore malformed event payloads
+      }
+    };
+
+    stream.onerror = () => {
+      // EventSource handles reconnects automatically.
+    };
+
+    return () => {
+      stream.close();
+    };
+  }, [running]);
+
   // Detection loop
   useEffect(() => {
     if (!running) {
       videoElRef.current = null;
+      setDetections([]);
       return;
     }
 
@@ -68,7 +110,11 @@ export default function LivePage() {
           const blob = await new Promise<Blob | null>((resolve) =>
             canvas.toBlob(resolve, "image/jpeg", 0.7)
           );
-          if (!blob || stopped) break;
+          if (stopped) break;
+          if (!blob) {
+            await new Promise((r) => setTimeout(r, 300));
+            continue;
+          }
 
           const form = new FormData();
           form.append("file", blob, "frame.jpg");
@@ -84,12 +130,6 @@ export default function LivePage() {
 
           const dets: Detection[] = data.detections ?? [];
           setDetections(dets);
-
-          if (dets.length > 0) {
-            const ts = new Date().toLocaleTimeString();
-            const newEvents = dets.map((d) => ({ label: d.label, ts }));
-            setEvents((prev) => [...newEvents, ...prev].slice(0, 30));
-          }
         } catch {
           // Backend unavailable — silently continue
         }

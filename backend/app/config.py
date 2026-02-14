@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     refresh_token_exp_minutes: int = 60 * 24
     storage_path: str = "/app/storage"
     webhook_retry_count: int = 3
+    cors_origins: str = Field("http://localhost:3000,http://127.0.0.1:3000", alias="CORS_ORIGINS")
     smtp_host: Optional[str] = None
     smtp_port: Optional[int] = None
     smtp_user: Optional[str] = None
@@ -43,6 +44,13 @@ class Settings(BaseSettings):
     def jwt_algorithm(self) -> str:  # noqa: D401
         """Algorithm used for JWT tokens."""
         return "HS256"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        raw = self.cors_origins.strip()
+        if raw == "*":
+            return ["*"]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
 @lru_cache
