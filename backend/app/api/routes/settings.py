@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 
-from ...config import settings
 from ...deps import require_role
 from ...models import Role
 

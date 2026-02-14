@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ... import schemas
 from ...db import get_db
 from ...deps import get_current_user, require_role
-from ...models import Role, Source, SourceType, User
+from ...models import Role, Source, User
 
 router = APIRouter(prefix="/api/sources", tags=["sources"])
 
