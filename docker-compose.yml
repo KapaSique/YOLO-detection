@@ -74,6 +74,7 @@ services:
     environment:
       WATCHPACK_POLLING: "true"
       CHOKIDAR_USEPOLLING: "true"
+      BACKEND_URL: "http://backend:8000"
     depends_on:
       backend:
         condition: service_healthy

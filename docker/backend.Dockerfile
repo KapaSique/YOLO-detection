@@ -5,7 +5,7 @@ WORKDIR /app/backend
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y build-essential ffmpeg curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y build-essential ffmpeg curl libgl1 libglib2.0-0 && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt .
 COPY backend/requirements-dev.txt .
