@@ -5,9 +5,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type Status = "idle" | "loading" | "active" | "error";
 
+export interface Detection {
+  label: string;
+  box: number[];
+}
+
 interface WebcamFeedProps {
   running: boolean;
   onError?: (message: string) => void;
+  detections?: Detection[];
+  onVideoReady?: (video: HTMLVideoElement) => void;
 }
 
 function getCameraErrorMessage(error: unknown): string {
@@ -37,8 +44,9 @@ function getCameraErrorMessage(error: unknown): string {
   return "Camera unavailable";
 }
 
-export function WebcamFeed({ running, onError }: WebcamFeedProps) {
+export function WebcamFeed({ running, onError, detections, onVideoReady }: WebcamFeedProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -117,6 +125,7 @@ export function WebcamFeed({ running, onError }: WebcamFeedProps) {
         await video.play();
         if (!cancelled) {
           setStatus("active");
+          onVideoReady?.(video);
         }
       } catch (err) {
         if (!cancelled) {
@@ -132,9 +141,54 @@ export function WebcamFeed({ running, onError }: WebcamFeedProps) {
       cancelled = true;
       stopStream();
     };
-    // onError intentionally excluded — stable via useCallback in parent
+    // onError/onVideoReady intentionally excluded — stable via useCallback in parent
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [running, stopStream]);
+
+  // Draw detections on canvas overlay
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    if (!canvas || !video) return;
+
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+    if (!vw || !vh) return;
+
+    canvas.width = vw;
+    canvas.height = vh;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, vw, vh);
+
+    if (!detections || detections.length === 0) return;
+
+    ctx.strokeStyle = "#22c55e";
+    ctx.lineWidth = 2;
+    ctx.font = "bold 14px sans-serif";
+
+    for (const det of detections) {
+      const [x1, y1, x2, y2] = det.box;
+      const w = x2 - x1;
+      const h = y2 - y1;
+
+      // Draw box
+      ctx.strokeRect(x1, y1, w, h);
+
+      // Draw label background
+      const textMetrics = ctx.measureText(det.label);
+      const textW = textMetrics.width + 8;
+      const textH = 20;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+      ctx.fillRect(x1, y1 - textH, textW, textH);
+
+      // Draw label text
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(det.label, x1 + 4, y1 - 5);
+    }
+  }, [detections]);
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-[1.05rem] bg-black">
@@ -144,6 +198,10 @@ export function WebcamFeed({ running, onError }: WebcamFeedProps) {
         playsInline
         muted
         className="absolute inset-0 h-full w-full object-cover"
+      />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
       />
 
       {status !== "active" && (
