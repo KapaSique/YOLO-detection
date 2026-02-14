@@ -13,13 +13,13 @@ const samples = [
 export function AnalyticsPreview() {
   const max = Math.max(...samples.map((s) => s.value));
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+    <div className="surface-card overflow-hidden rounded-2xl">
+      <div className="flex items-center justify-between border-b border-border/70 px-5 py-3">
         <div className="flex items-center gap-2.5 text-sm font-semibold text-card-foreground">
-          <BarChart3 size={16} className="text-primary" />
+          <BarChart3 size={16} className="text-accent" />
           Detections timeline
         </div>
-        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+        <span className="rounded-full border border-accent/35 bg-accent/12 px-2.5 py-0.5 text-[11px] font-semibold text-accent">
           Realtime
         </span>
       </div>
@@ -27,11 +27,11 @@ export function AnalyticsPreview() {
         {samples.map((item) => (
           <div key={item.label} className="flex flex-1 flex-col items-center gap-2">
             <div
-              className="w-full rounded-sm bg-primary/80 transition-all hover:bg-primary"
+              className="w-full rounded-sm bg-accent/80 transition-all hover:bg-accent"
               style={{ height: `${(item.value / max) * 100}%`, minHeight: 8 }}
               title={`${item.value} detections`}
             />
-            <div className="text-[10px] text-muted-foreground">{item.label}</div>
+            <div className="font-mono-ui text-[10px] text-muted-foreground">{item.label}</div>
           </div>
         ))}
       </div>

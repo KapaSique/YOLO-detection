@@ -5,13 +5,13 @@ import { Providers } from "./providers";
 import "../styles/globals.css";
 
 const grotesk = Space_Grotesk({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   variable: "--font-grotesk",
   weight: ["400", "500", "600", "700"]
 });
 
 const plexMono = IBM_Plex_Mono({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "500", "600"]
 });
